@@ -15,7 +15,7 @@ def print_operations(operations):
 
 
 def load_json():
-    with open('../utils/operations.json', 'r', encoding='utf-8') as file:
+    with open('utils/operations.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
     sorted_data = []
     try:
@@ -28,15 +28,25 @@ def load_json():
     except Exception as e:
         pass
     return sorted_data[:5]
-    # return sorted_data[:5]
 
 
 def normalize_date(date):
-    date_obj = datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%f')
-    return date_obj.strftime('%d.%m.%Y')
+    try:
+        date_obj = datetime.strptime(date, '%Y-%m-%dT%H:%M:%S.%f')
+        return date_obj.strftime('%d.%m.%Y')
+    except:
+        return '01.01.1990'
 
 
 def card_num_converter(card):
+    try:
+        tmp_card = card
+        card = card.split(" ")
+        a = card[0]
+        b = card[1]
+    except:
+        return '*'
+    card = tmp_card
     mask_list = [6, 7, 8, 9, 10, 11]
     masked_card_num = ""
     if "Счет" in card:
@@ -48,7 +58,7 @@ def card_num_converter(card):
             card_name = card[0]
             card_num = str(card[1])
         except:
-            card_name = card[0] + card[1]
+            card_name = card[0] + " " + card[1]
             card_num = str(card[2])
         for i in range(0, len(card_num)):
             if i in mask_list:
